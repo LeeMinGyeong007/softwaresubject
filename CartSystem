@@ -1,0 +1,32 @@
+class CartSystem:
+    def __init__(self):
+        self.items = []
+    
+    def add_item(self, item_id):
+        self.items.append(item_id)
+        return {"status": "ITEM_ADDED", "total_items": len(self.items)}
+
+    def checkout(self):
+        return PaymentGateway().process_payment(55000)
+
+class PaymentGateway:
+    @staticmethod
+    def process_payment(amount):
+        return {"status": "SUCCESS", "transaction_id": "TX987654321"}
+
+class OrderSystem:
+    @staticmethod
+    def create_order(items):
+        return {"order_id": 789, "items": items}
+
+# 실행 예시
+if __name__ == "__main__":
+    cart = CartSystem()
+    print(cart.add_item(123))  # {'status': 'ITEM_ADDED', 'total_items': 1}
+    checkout_result = cart.checkout()
+    print(checkout_result)  # {'status': 'SUCCESS', 'transaction_id': 'TX987654321'}
+
+평가 항목	결과	근거
+응집도	높음	CartSystem은 장바구니 관리만 담당, PaymentGateway는 결제 처리 전담
+결합도	낮음	클래스 간 의존성 최소화(결제시스템은 정적 메서드로 분리)
+확장성	보통	새로운 결제 수단 추가시 PaymentGateway 확장 가능
